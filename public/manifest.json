@@ -1,0 +1,33 @@
+{
+  "id": "/",
+  "name": "Teríus on — Portal de Inteligência Linguística",
+  "short_name": "Teríus on",
+  "description": "Portal de inteligência linguística e proficiência multilíngue: salas de estudo, dicionário multilíngue, tradutor universal e certificações.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#5A5A40",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

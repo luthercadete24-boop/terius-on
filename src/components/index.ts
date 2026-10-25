@@ -1,0 +1,24 @@
+// Teríus on — Portal de Inteligência Linguística & Proficiência Multilíngue
+export { default as Logo } from "./common/Logo";
+export { default as Navbar } from "./layout/Navbar";
+export { default as ViewModeTabs } from "./study/ViewModeTabs";
+export { default as LanguageSelector } from "./study/LanguageSelector";
+export { default as LevelSelector } from "./study/LevelSelector";
+export { LessonWorkspace } from "./study/LessonWorkspace";
+export { default as StudyCalendar } from "./study/StudyCalendar";
+export { default as VocabularySection } from "./study/VocabularySection";
+export { PronunciationPractice } from "./study/PronunciationPractice";
+export { default as GrammarSection } from "./study/GrammarSection";
+export { default as FinalExamSection } from "./study/FinalExamSection";
+export { default as DictionarySection } from "./dictionary/DictionarySection";
+export { default as TranslatorSection } from "./translator/TranslatorSection";
+export { default as SettingsModal } from "./settings/SettingsModal";
+export { EstatisticasDashboard } from "./settings/EstatisticasDashboard";
+export { default as AdminPanel } from "./admin/AdminPanel";
+export { default as AuthModal } from "./auth/AuthModal";
+export { default as PlansAndCheckoutModal } from "./payment/PlansAndCheckoutModal";
+export { default as PlansSection } from "./payment/PlansSection";
+export { default as InfrastructureHub } from "./infrastructure/InfrastructureHub";
+export { default as PWAInstallButton } from "./pwa/PWAInstallButton";
+export { default as QuickInstallModal } from "./pwa/QuickInstallModal";
+export { default as WhatsAppButton } from "./common/WhatsAppButton";

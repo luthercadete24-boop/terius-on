@@ -1,0 +1,191 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account profile and authentication details",
+      "type": "object",
+      "properties": {
+        "id_usuario": {
+          "type": "string",
+          "description": "Unique user identifier matching request.auth.uid",
+          "maxLength": 128
+        },
+        "nome": {
+          "type": "string",
+          "description": "Display name of the user",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 150
+        },
+        "role": {
+          "type": "string",
+          "description": "User permission role",
+          "enum": ["user", "admin"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the user account was created"
+        }
+      },
+      "required": ["id_usuario", "nome", "email", "role"]
+    },
+    "UserProgress": {
+      "title": "User Study Progress",
+      "description": "Tracks proficiency level unlock and completion state for a student",
+      "type": "object",
+      "properties": {
+        "id_nivel": {
+          "type": "number",
+          "description": "Level identifier number"
+        },
+        "bloqueado": {
+          "type": "boolean",
+          "description": "Whether the proficiency level is locked"
+        },
+        "concluido": {
+          "type": "boolean",
+          "description": "Whether the proficiency level exam is completed"
+        },
+        "nota_prova_final": {
+          "type": "number",
+          "description": "Final exam grade from 0 to 10"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the last update"
+        }
+      },
+      "required": ["id_nivel", "bloqueado", "concluido", "nota_prova_final"]
+    },
+    "StudyCalendar": {
+      "title": "Study Calendar Schedule",
+      "description": "Scheduled study reminder entries for the user",
+      "type": "object",
+      "properties": {
+        "id_idioma": {
+          "type": "number",
+          "description": "Language identifier"
+        },
+        "dia_semana": {
+          "type": "number",
+          "description": "Day of the week (0 to 6)"
+        },
+        "hora_estudo": {
+          "type": "string",
+          "description": "Time string in HH:mm format",
+          "maxLength": 10
+        },
+        "minutos_meta": {
+          "type": "number",
+          "description": "Study goal duration in minutes"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of schedule update"
+        }
+      },
+      "required": ["id_idioma", "dia_semana", "hora_estudo", "minutos_meta"]
+    },
+    "PronunciationPractice": {
+      "title": "Pronunciation Practice Record",
+      "description": "Web Speech API voice comparison assessment record",
+      "type": "object",
+      "properties": {
+        "id_vocabulario": {
+          "type": "number",
+          "description": "Vocabulary card identifier"
+        },
+        "termo_original": {
+          "type": "string",
+          "description": "Expected term text",
+          "maxLength": 200
+        },
+        "idioma": {
+          "type": "string",
+          "description": "Target language name",
+          "maxLength": 50
+        },
+        "spokenText": {
+          "type": "string",
+          "description": "Transcribed speech recognized by the browser",
+          "maxLength": 300
+        },
+        "accuracyScore": {
+          "type": "number",
+          "description": "Phonetic similarity score percentage (0-100)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when practice was recorded"
+        }
+      },
+      "required": ["id_vocabulario", "termo_original", "idioma", "accuracyScore"]
+    },
+    "FavoriteTranslation": {
+      "title": "Saved Translation",
+      "description": "Bookmarked translation from the universal translator",
+      "type": "object",
+      "properties": {
+        "texto_original": {
+          "type": "string",
+          "description": "Original text translated",
+          "maxLength": 2000
+        },
+        "traducao": {
+          "type": "string",
+          "description": "Resulting translation text",
+          "maxLength": 3000
+        },
+        "codigo_origem": {
+          "type": "string",
+          "description": "Source language code",
+          "maxLength": 10
+        },
+        "codigo_destino": {
+          "type": "string",
+          "description": "Target language code",
+          "maxLength": 10
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when bookmarked"
+        }
+      },
+      "required": ["texto_original", "traducao", "codigo_origem", "codigo_destino"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles containing public display information and preferences"
+    },
+    "/users/{userId}/progress/{progressId}": {
+      "schema": { "$ref": "#/entities/UserProgress" },
+      "description": "User study progress and exam scores per competence level"
+    },
+    "/users/{userId}/calendar/{calendarId}": {
+      "schema": { "$ref": "#/entities/StudyCalendar" },
+      "description": "Weekly study schedule set by the user"
+    },
+    "/users/{userId}/pronunciation/{practiceId}": {
+      "schema": { "$ref": "#/entities/PronunciationPractice" },
+      "description": "Web Speech API pronunciation evaluations and accuracy logs"
+    },
+    "/users/{userId}/favorites/{favoriteId}": {
+      "schema": { "$ref": "#/entities/FavoriteTranslation" },
+      "description": "Saved translation bookmarks for the user"
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Privileged administrator registry documents"
+    }
+  }
+}

@@ -1,0 +1,134 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == 'luthercadete24@gmail.com'
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity validation blueprints
+    function isValidUser(data, userId) {
+      return data.keys().hasAll(['id_usuario', 'nome', 'email', 'role']) &&
+             data.keys().hasOnly(['id_usuario', 'nome', 'email', 'role', 'createdAt']) &&
+             data.id_usuario == userId &&
+             data.id_usuario == request.auth.uid &&
+             data.nome is string && data.nome.size() > 0 && data.nome.size() <= 100 &&
+             data.email is string && data.email.size() > 0 && data.email.size() <= 150 &&
+             data.role in ['user', 'admin'];
+    }
+
+    function isValidProgress(data) {
+      return data.keys().hasAll(['id_nivel', 'bloqueado', 'concluido', 'nota_prova_final']) &&
+             data.keys().hasOnly(['id_nivel', 'bloqueado', 'concluido', 'nota_prova_final', 'updatedAt']) &&
+             data.id_nivel is number &&
+             data.bloqueado is bool &&
+             data.concluido is bool &&
+             data.nota_prova_final is number &&
+             data.nota_prova_final >= 0 && data.nota_prova_final <= 10;
+    }
+
+    function isValidCalendar(data) {
+      return data.keys().hasAll(['id_idioma', 'dia_semana', 'hora_estudo', 'minutos_meta']) &&
+             data.keys().hasOnly(['id_idioma', 'dia_semana', 'hora_estudo', 'minutos_meta', 'updatedAt']) &&
+             data.id_idioma is number &&
+             data.dia_semana is number && data.dia_semana >= 0 && data.dia_semana <= 6 &&
+             data.hora_estudo is string && data.hora_estudo.size() <= 10 &&
+             data.minutos_meta is number && data.minutos_meta >= 5 && data.minutos_meta <= 480;
+    }
+
+    function isValidPronunciation(data) {
+      return data.keys().hasAll(['id_vocabulario', 'termo_original', 'idioma', 'accuracyScore']) &&
+             data.keys().hasOnly(['id_vocabulario', 'termo_original', 'idioma', 'spokenText', 'accuracyScore', 'createdAt']) &&
+             data.id_vocabulario is number &&
+             data.termo_original is string && data.termo_original.size() <= 200 &&
+             data.idioma is string && data.idioma.size() <= 50 &&
+             data.accuracyScore is number && data.accuracyScore >= 0 && data.accuracyScore <= 100 &&
+             (!('spokenText' in data) || (data.spokenText is string && data.spokenText.size() <= 300));
+    }
+
+    function isValidFavorite(data) {
+      return data.keys().hasAll(['texto_original', 'traducao', 'codigo_origem', 'codigo_destino']) &&
+             data.keys().hasOnly(['texto_original', 'traducao', 'codigo_origem', 'codigo_destino', 'createdAt']) &&
+             data.texto_original is string && data.texto_original.size() <= 2000 &&
+             data.traducao is string && data.traducao.size() <= 3000 &&
+             data.codigo_origem is string && data.codigo_origem.size() <= 10 &&
+             data.codigo_destino is string && data.codigo_destino.size() <= 10;
+    }
+
+    // User collection and subcollections
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming(), userId) &&
+                       (incoming().role == 'user' || isAdmin());
+      allow update: if (isOwner(userId) || isAdmin()) && isValidId(userId) && isValidUser(incoming(), userId) &&
+                       (incoming().role == existing().role || isAdmin());
+      allow delete: if isAdmin();
+
+      // Study progress per competence level
+      match /progress/{progressId} {
+        allow get, list: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId) && isValidId(progressId) && isValidProgress(incoming());
+        allow update: if isOwner(userId) && isValidId(progressId) && isValidProgress(incoming());
+        allow delete: if isOwner(userId) || isAdmin();
+      }
+
+      // Weekly study schedule
+      match /calendar/{calendarId} {
+        allow get, list: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId) && isValidId(calendarId) && isValidCalendar(incoming());
+        allow update: if isOwner(userId) && isValidId(calendarId) && isValidCalendar(incoming());
+        allow delete: if isOwner(userId) || isAdmin();
+      }
+
+      // Pronunciation practice & accuracy evaluations
+      match /pronunciation/{practiceId} {
+        allow get, list: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId) && isValidId(practiceId) && isValidPronunciation(incoming());
+        allow delete: if isOwner(userId) || isAdmin();
+      }
+
+      // Bookmarked favorite translations
+      match /favorites/{favoriteId} {
+        allow get, list: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId) && isValidId(favoriteId) && isValidFavorite(incoming());
+        allow delete: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    // Admin authorization document storage
+    match /admins/{adminId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

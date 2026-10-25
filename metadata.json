@@ -1,0 +1,6 @@
+{
+  "name": "Teríus on",
+  "description": "Portal de inteligência linguística e proficiência multilíngue: salas de estudo por níveis de proficiência, dicionário multilíngue, tradutor universal, gráficos avançados de desempenho e planos de assinatura com checkout rápido via Google Pay e cartão Visa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

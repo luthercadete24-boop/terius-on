@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Portal de inteligência linguística e proficiência multilíngue: salas de estudo por níveis de proficiência, dicionário multilíngue, tradutor universal, gráficos avançados de desempenho e planos de assinatura com checkout rápido via Google Pay e cartão Visa." />
+    <meta property="og:title" content="Teríus on" />
+    <meta property="og:description" content="Portal de inteligência linguística e proficiência multilíngue: salas de estudo por níveis de proficiência, dicionário multilíngue, tradutor universal, gráficos avançados de desempenho e planos de assinatura com checkout rápido via Google Pay e cartão Visa." />
+    <meta property="og:type" content="website" />
+    <title>Teríus on — Portal de Inteligência Linguística</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Teríus on" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Teríus on" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <meta name="theme-color" content="#5A5A40" />
+    <script>
+      // Early suppression of WebSocket and Vite HMR errors in sandbox iframe
+      window.addEventListener('error', function(e) {
+        var msg = String(e && e.message || '');
+        var src = String(e && e.filename || '');
+        if (msg.indexOf('ResizeObserver') !== -1 || msg.indexOf('WebSocket') !== -1 || src.indexOf('@vite/client') !== -1) {
+          if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+          if (e.preventDefault) e.preventDefault();
+          return true;
+        }
+      }, true);
+      window.addEventListener('unhandledrejection', function(e) {
+        var r = String((e && e.reason && (e.reason.message || e.reason.stack || e.reason)) || '');
+        if (r.indexOf('WebSocket') !== -1 || r.indexOf('@vite/client') !== -1) {
+          if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+          if (e.preventDefault) e.preventDefault();
+        }
+      }, true);
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Register Service Worker for PWA installation & offline capability
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(function(reg) {
+              console.log('PWA ServiceWorker registered, scope:', reg.scope);
+            })
+            .catch(function(err) {
+              console.warn('PWA ServiceWorker registration failed:', err);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
+

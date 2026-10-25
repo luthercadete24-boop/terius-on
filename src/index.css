@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+:root {
+  --natural-bg: #F5F5F0;
+  --natural-text: #3A3A30;
+  --natural-primary: #5A5A40;
+  --natural-primary-hover: #484832;
+  --natural-accent: #C05B33;
+  --natural-card: #FFFFFF;
+  --natural-border: #E6E6E0;
+}
+
+.dark {
+  --natural-bg: #1A1A14;
+  --natural-text: #E2E2D6;
+  --natural-primary: #A8A88E;
+  --natural-primary-hover: #C5C5AE;
+  --natural-accent: #E26E40;
+  --natural-card: #25251E;
+  --natural-border: #3D3D32;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Lora", Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-display: "Lora", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Natural Tones styling scheme using CSS variables */
+  --color-natural-bg: var(--natural-bg);
+  --color-natural-text: var(--natural-text);
+  --color-natural-primary: var(--natural-primary);
+  --color-natural-primary-hover: var(--natural-primary-hover);
+  --color-natural-accent: var(--natural-accent);
+  --color-natural-card: var(--natural-card);
+}
+
+/* Custom base styles */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--natural-bg);
+  color: var(--natural-text);
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Scrollbar customization matching Natural Tones style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--natural-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--natural-primary);
+  border-radius: 3px;
+  opacity: 0.7;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--natural-primary-hover);
+}
+
+/* Cards & container styling presets to replace dark slate templates */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(90, 90, 64, 0.12);
+}
+
+.glow-indigo {
+  box-shadow: 0 12px 36px -12px rgba(90, 90, 64, 0.15), 0 2px 8px rgba(90, 90, 64, 0.04);
+}
+
+.flashcard-3d {
+  perspective: 1200px;
+}
+
+.flashcard-inner {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flashcard-back {
+  transform: rotateY(180deg);
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Dynamic Dark Mode overrides for seamless styling coverage */
+.dark body {
+  background-color: var(--natural-bg);
+  color: var(--natural-text);
+}
+
+.dark .bg-white {
+  background-color: var(--natural-card) !important;
+  color: var(--natural-text) !important;
+}
+
+.dark .bg-natural-card {
+  background-color: var(--natural-card) !important;
+  color: var(--natural-text) !important;
+}
+
+.dark .text-stone-800 {
+  color: #E2E2D6 !important;
+}
+
+.dark .text-stone-700 {
+  color: #C5C5BA !important;
+}
+
+.dark .text-stone-600 {
+  color: #A8A89E !important;
+}
+
+.dark .text-stone-500 {
+  color: #8D8D83 !important;
+}
+
+.dark .text-stone-400 {
+  color: #727268 !important;
+}
+
+.dark .bg-stone-50 {
+  background-color: #2D2D24 !important;
+  color: #E2E2D6 !important;
+}
+
+.dark .bg-stone-100 {
+  background-color: #35352C !important;
+  color: #E2E2D6 !important;
+}
+
+.dark .border-stone-200, 
+.dark .border-stone-150, 
+.dark .border-stone-100 {
+  border-color: var(--natural-border) !important;
+}
+
+.dark .border-stone-250 {
+  border-color: #4A4A3E !important;
+}
+
+.dark input, 
+.dark select, 
+.dark textarea {
+  background-color: #2D2D24 !important;
+  color: #E2E2D6 !important;
+  border-color: var(--natural-border) !important;
+}
+
+.dark header {
+  background-color: rgba(37, 37, 30, 0.8) !important;
+  border-color: var(--natural-border) !important;
+}
+
+.dark #settings-modal-card {
+  background-color: var(--natural-card) !important;
+  border-color: var(--natural-border) !important;
+}
+
+.dark #settings-modal-card .bg-stone-50\/50,
+.dark #settings-modal-card .bg-stone-50\/60,
+.dark #settings-modal-card .bg-stone-100 {
+  background-color: #2D2D24 !important;
+  border-color: var(--natural-border) !important;
+}
